@@ -1,0 +1,103 @@
+%========================%
+%        Preamble        %
+%========================%
+\documentclass[12pt]{amsart}
+
+%========================%
+%        Packages        %
+%========================%
+
+\usepackage[utf8]{inputenc}
+% \usepackage{amsmath}    % Included in amsart package
+% \usepackage{amsthm}     % 
+% \usepackage{amssymb}    % 
+\usepackage{mathtools}      % Paired Limiter Macros
+\usepackage{mdframed}       % boxes for theorem
+\usepackage[hidelinks]{hyperref}
+
+%========================% 
+%          Title         %
+%========================% 
+\title{Circulant Matrices}
+\author{Dylan Ang}
+\date{\today}
+
+%========================% 
+%        Theorems        %
+%========================% 
+\newmdtheoremenv{theorem}{Theorem}  % Boxed theorems
+\newtheorem{definition}{Definition} % Definitions
+\newtheorem*{proof*}{Proof}         % non-numbered
+\newtheorem*{remark}{Remark}        %
+\newtheorem*{example}{Example}      %
+\numberwithin{equation}{theorem}    % Local equation numbering
+
+%========================% 
+%        Macros          %
+%========================% 
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}  % Vertical bars
+\DeclarePairedDelimiter\norm{\lVert}{\rVert} % Double vertical bars
+\newcommand{\drawvec}[1]{                    % matrices on one line
+    \begin{bmatrix}
+        #1
+    \end{bmatrix}
+}
+
+%========================% 
+%         Document       %
+%========================% 
+\begin{document}
+
+\maketitle
+
+\begin{definition}
+    An nxn matrix C is called circulant if C =
+    \begin{align*}
+        \begin{bmatrix}
+            c_1     & c_n     & c_{n-1} & \cdots     & c_2     \\
+            c_2     & c_1     & c_n     & \cdots     & \cdots  \\
+            c_3     & c_2     & c_1     & \cdots     & \cdots  \\
+            \cdots  & c_3     & c_2     & \cdots     & c_{n-1} \\
+            c_{n-1} & \cdots  & c_3     & \cdots     & c_n     \\
+            c_n     & c_{n-1} & c_{n-1} & \cdots c_2 & c_1
+        \end{bmatrix}
+    \end{align*}
+\end{definition}
+
+\begin{example}
+    \begin{align*}
+        C = \begin{bmatrix}
+            4 & 1 & 2 & 3 \\
+            3 & 4 & 1 & 2 \\
+            2 & 3 & 4 & 1 \\
+            1 & 2 & 3 & 4
+        \end{bmatrix}
+    \end{align*}
+\end{example}
+
+\section{Discrete Fourier Transform}
+
+\begin{definition}
+    The nxn DFT matrix is given by
+    \begin{align*}
+        F_n = \frac{1}{\sqrt{n}} \begin{bmatrix}
+            1 & 1            & 1               & 1               & \cdots & 1                   \\
+            1 & \omega       & \omega^2        & omega^3         & \cdots & \omega^{n-1}        \\
+            1 & \omega^2     & \omega^4        & omega^6         & \cdots & \omega^{2(n-1)}     \\
+            1 & \omega^3     & \omega^6        & omega^9         & \cdots & \omega^{3(n-1)}     \\
+              &              &                 & \cdots          &        &                     \\
+            1 & \omega^{n-1} & \omega^{2(n-1)} & \omega^{3(n-1)} & \cdots & \omega^{(n-1)(n-1)}
+        \end{bmatrix}
+    \end{align*}
+    where $\omega = e^{2\pi i / n}$ and $i=\sqrt{-1}$
+\end{definition}
+
+\begin{theorem}
+    A circulant matrix is diagonalized by the DFT matrix. Then $F_{n}^{-1} C F_n = \Lambda$ where $\Lambda=$ diagonal matrix, containing eigenvalues of C.
+    \begin{remark}
+        $F_{n}^{-1} = F_{n}^{H}$ and $C^{-1}=F_n \Lambda^{-1}F_{n}^{H}$
+    \end{remark}
+    Multiplication by the DFT matrix $F_N$ can be done in $n\log{n}$ computations instead of $n^2$ computations. Done via Fast Fourier Transforms.
+\end{theorem}
+
+\end{document}

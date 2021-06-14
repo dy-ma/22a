@@ -1,0 +1,97 @@
+%========================%
+%        Preamble        %
+%========================%
+\documentclass[12pt]{amsart}
+
+%========================%
+%        Packages        %
+%========================%
+
+\usepackage[utf8]{inputenc}
+% \usepackage{amsmath}    % Included in amsart package
+% \usepackage{amsthm}     % 
+% \usepackage{amssymb}    % 
+\usepackage{mathtools}      % Paired Limiter Macros
+\usepackage{mdframed}       % boxes for theorem
+\usepackage[hidelinks]{hyperref}
+
+%========================% 
+%          Title         %
+%========================% 
+\title{Symmetric Matrices}
+\author{Dylan Ang}
+\date{\today}
+
+%========================% 
+%        Theorems        %
+%========================% 
+\newmdtheoremenv{theorem}{Theorem}  % Boxed theorems
+\newtheorem{definition}{Definition} % Definitions
+\newtheorem*{proof*}{Proof}         % non-numbered
+\newtheorem*{remark}{Remark}        %
+\newtheorem*{example}{Example}      %
+\numberwithin{equation}{theorem}    % Local equation numbering
+
+%========================% 
+%        Macros          %
+%========================% 
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}  % Vertical bars
+\DeclarePairedDelimiter\norm{\lVert}{\rVert} % Double vertical bars
+\newcommand{\drawvec}[1]{                    % matrices on one line
+    \begin{bmatrix}
+        #1
+    \end{bmatrix}
+}
+
+%========================% 
+%         Document       %
+%========================% 
+\begin{document}
+
+\maketitle
+
+Recall: S is a symmetric matrix if $S=S^T$
+
+\begin{theorem}
+    If S is a symmetric matrix, then all its eigenvalues are real values.
+\end{theorem}
+
+\begin{proof}
+    Let $S\vec{x} = \lambda \vec{x}$. $\Lambda$ could be complex-valued: $\Lambda=a+ib$, $i=\sqrt{-1}$. We want to show that $\Lambda$ is real-valued, i.e. $b=0$.
+
+    Let $\bar\Lambda=a-ib$ be the conjugate of $\Lambda$ and $\bar{\vec{x}}$ be the conjugate of $\vec{x}$.
+
+    Know: $\bar{\Lambda \vec{x}} = \bar\Lambda \bar\vec{X}$
+
+    Also know: $S=\bar S$, since S is real-valued.
+
+    \begin{align*}
+        S\vec{x} = \lambda \vec{x}                            & \text{, Now take conjugate on both sides}      \\
+        \bar{S\vec{x}} = \bar{\lambda \vec{x}}                &                                                \\
+        \bar S \bar \vec{x} = \bar\lambda \bar\vec{x}         & , \text{S is real valued, so } \bar S = S      \\
+        S \bar \vec{x} = \bar\lambda \bar\vec{x}              & , \text{ Now take the transpose on both sides} \\
+        (S\bar \vec{x})^{T} = (\bar \lambda \bar \vec{x})^{T} &                                                \\
+        \bar\vec{x}^T S^{T} = \bar\vec{x}^{T} \bar \lambda    & , \text{ S is symmetric, so } S=S^{T}          \\
+        \bar\vec{x}^T S = \bar\vec{x}^T \bar\lambda           & , \text{ Now take product with } \vec{x}       
+    \end{align*}
+    \begin{equation}\label{normal x}
+        \bar\vec{x}^T Sx = \bar\vec{x}^T \bar\lambda x 
+    \end{equation}
+
+    Now consider $S\vec{x}=\lambda\vec{x}$ take dot product with $\vec{x}$
+    \begin{equation}\label{vec x}
+        \bar\vec{x}^T S \vec{x} = \bar\vec{x}^T \lambda \vec{x} 
+    \end{equation}
+
+    Left sides of \eqref{normal x} and \eqref{vec x} are equal $\Rightarrow$ right sides are equal.
+    \begin{align*}
+        \Rightarrow \bar\vec{x}^T \bar\lambda \vec{x} &= \bar\vec{x}\lambda\vec{x} \\
+        \bar\lambda\underbrace{\bar\vec{x}^T\vec{x}} &= \lambda\underbrace{\bar\vec{x}^T\vec{x}} \\
+        \text{These terms are equal: } & \bar\vec{x}^T = \sum_{k=1}^{n}{\bar x_k x_k} = \sum_{k=1}^{n}{\abs{x_{k}^{2}}} \\
+        & \Rightarrow \bar\vec{x}^T\vec{X} \neq 0 \\
+        \Rightarrow \bar\lambda &= \lambda \\
+        \Rightarrow a-ib &= a+ib \Rightarrow b=0 \Rightarrow \lambda \text{ is real} 
+    \end{align*}
+\end{proof}
+
+\end{document}

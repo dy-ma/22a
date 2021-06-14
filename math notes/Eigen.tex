@@ -1,0 +1,269 @@
+%========================%
+%        Preamble        %
+%========================%
+\documentclass[12pt]{amsart}
+
+%========================%
+%        Packages        %
+%========================%
+
+\usepackage[utf8]{inputenc}
+% \usepackage{amsmath}    % Included in amsart package
+% \usepackage{amsthm}     % 
+% \usepackage{amssymb}    % 
+\usepackage{mathtools}      % Paired Limiter Macros
+\usepackage{mdframed}       % boxes for theorem
+\usepackage[hidelinks]{hyperref}
+
+%========================% 
+%          Title         %
+%========================% 
+\title{Eigenvectors and Eigenvalues}
+\author{Dylan Ang}
+\date{\today}
+
+%========================% 
+%        Theorems        %
+%========================% 
+\newmdtheoremenv{theorem}{Theorem}  % Boxed theorems
+\newtheorem{definition}{Definition} % Definitions
+\newtheorem*{proof*}{Proof}         % non-numbered
+\newtheorem*{remark}{Remark}        %
+\newtheorem{example}{Example}      %
+\numberwithin{equation}{theorem}    % Local equation numbering
+
+%========================% 
+%        Macros          %
+%========================% 
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}  % Vertical bars
+\DeclarePairedDelimiter\norm{\lVert}{\rVert} % Double vertical bars
+\newcommand{\drawvec}[1]{                    % matrices on one line
+    \begin{bmatrix}
+        #1
+    \end{bmatrix}
+}
+
+%========================% 
+%         Document       %
+%========================% 
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\begin{definition}
+    Let A be an nxn matrix. An \textbf{eigenvector} of A is a nonzero vector $\vec{v}$ in $\mathbb{R}^n$ such that $Av=\lambda v$, for some scalar $\lambda$. An \textbf{eigenvalue} of A is a scalar $\lambda$ such that the equation $Av=\lambda v$ has a nontrivial solution.
+\end{definition}
+
+\begin{align}
+    A\vec{x} = \lambda \vec{x} \qquad & \lambda \text{ is an \emph{eigenvalue} of A}  \\
+                                      & \vec{x} \text{ is an \emph{eigenvector} of A} \\
+                                      & \text{if equation is true}
+\end{align}
+
+$\Rightarrow$ "eigen" = "self" (from German)
+
+$\lambda$ tells us by how much we shrink (if $\norm{\lambda} < 1$) or stretch (if $\norm{\lambda} > 1)\vec{x}$ and reverse direction (if $\lambda < 0$)
+
+
+
+\begin{theorem}
+    if $\vec{x}$ is an eigenvector of A, then so is $\lambda \vec{x}$ for any $\alpha \neq 0$
+\end{theorem}
+
+
+\begin{proof}
+    \begin{align*}
+         & A(\alpha \vec{x}) = \alpha A \vec{x} = \alpha \lambda \vec{x} = \lambda (\alpha \vec{x}) \\
+         & \alpha \& \lambda \text{ are both scalars, so we can move them around}
+    \end{align*}
+\end{proof}
+
+We have infinitely many eigenvectors, so we typically normalize them
+
+\begin{example}
+    Let \begin{equation*}
+        A=\begin{bmatrix}
+            4 & 1 \\
+            1 & 4
+        \end{bmatrix}, \vec{u}=\drawvec{0 \\ 1}, \vec{v}=\drawvec{-1 \\ 1}
+    \end{equation*}
+    \begin{align*}
+        \Rightarrow A\vec{u} & = \drawvec{1                       \\ 4}, A\vec{v} = \drawvec{-3\\3} \\
+        A\vec{v}             & = 3\vec{v} \Rightarrow \lambda = 3
+    \end{align*}
+
+    Step: Normalize $\vec{v}$
+    $$\norm{\vec{v}} = \sqrt{2}$$
+
+    Eigenvector is $$\vec{x} = \frac{1}{\sqrt{2}} \drawvec{-1\\1}, \quad \norm{\vec{x}} = 1$$
+
+    Then
+    $$A\vec{x} =
+        \begin{bmatrix}
+            4 & 1 \\
+            1 & 4
+        \end{bmatrix}
+        * \frac{1}{\sqrt{2}}
+        \drawvec{-1 \\ 1}
+        =
+        \underbrace{3}_\lambda *
+        \underbrace{ \frac{1}{\sqrt2} \drawvec{-1\\1}}_{\vec{x}}
+    $$
+
+    $\Rightarrow \vec{x}$ is an \emph{eigenvector} of A with an associated \emph{eigenvalue} of 3.
+\end{example}
+
+\begin{example}
+    
+Is $\lambda=5$ true with eigenvector $\frac{1}{\sqrt{2}} \drawvec{1\\ 1}$?
+
+
+\begin{equation*}
+    \underbrace{ \drawvec{4 & 1\\ 1 & 4} }_A \underbrace{ \frac{1}{\sqrt{2}} \drawvec{1 \\ 1} }_{\vec{x}} = \frac{1}{\sqrt{2}} \drawvec{5 \\ 5} = \underbrace{5}_\lambda* \underbrace{\frac{1}{\sqrt{2}} \drawvec{1 \\ 1}}_{\vec{x}}
+\end{equation*}
+
+Two eigenvectors $\frac{1}{\sqrt{2}} \drawvec{-1 \\ 1}, \frac{1}{\sqrt{2}} \drawvec{1 \\ 1}$ and eigenvalues $\lambda_1 = 3, \lambda_2 = 5$
+
+Are there more eigenvalues in this case? No, how do we find that?
+\end{example}
+
+
+\section{How we find eigenvalues and eigenvectors}
+
+\begin{align*}
+     & A\vec{x} = \lambda \vec{x}                           \\
+     & \Leftrightarrow A\vec{x} - \lambda \vec{x} = \vec{0} \\
+     & \Leftrightarrow (A - \lambda I)\vec{x} = \vec{0}
+\end{align*}
+
+This means $\vec{x}$ is an eigenvector of A if and only if $\vec{x}$ is in the \emph{nullspace} of $(A-\lambda I)$
+
+\begin{equation} \label{eigenvector condition}
+    \vec{x} \in \mathcal{N}(A-\lambda I)
+\end{equation}
+
+But we do not know $\lambda \Rightarrow$  we do not know $A-\lambda I$ yet.
+
+\begin{itemize}
+    \item $(A-\lambda I)$ has a non trivial nullspace (= nullspace contains not just the $\vec{v}$)
+          \begin{itemize}
+              \item This is true if A is invertible, because invertible matrices have only $\vec{0}$ in the nullspace.
+              \item if $det(A-\lambda I) = 0$
+          \end{itemize}
+    \item $\Rightarrow$ Find those $\lambda$ for which $det(A-\lambda I) = 0$
+\end{itemize}
+
+\begin{example}
+$$
+    A=\drawvec{4 & 1 \\ 1 & 4}, A-\lambda I = \drawvec{4 & 1 \\ 1 & 4} - \lambda \drawvec{1 & 0\\ 0 & 1}
+$$
+$$
+    det(A-\lambda I)
+    = det \underbrace{\begin{bmatrix}
+            4 - \lambda & 1           \\
+            1           & 4 - \lambda
+        \end{bmatrix}}_{A-\lambda I}
+$$
+
+$$ det\begin{bmatrix}
+        4 - \lambda & 1           \\
+        1           & 4 - \lambda
+    \end{bmatrix} = (4-\lambda)^2 - 1^2 = \underbrace{0}_{Nullspace}$$
+
+$$\Rightarrow \lambda^2 - 8 \lambda +15 = 0$$
+$$\Rightarrow \underbrace{\lambda_1 = 3, \lambda_2 = 5}_\text{Eigenvalues of A}$$
+\end{example}
+
+\begin{example}\textbf{Finding eigenvectors}
+
+Condition: equation (\ref{eigenvector condition})
+
+\begin{align*}
+    \lambda = 3              & : A-\lambda I = \begin{bmatrix}
+        4 - \lambda & 1           \\
+        1           & 4 - \lambda
+    \end{bmatrix} = \drawvec{1 & 1 \\ 1 & 1} \\
+    \mathcal{N}(A-\lambda I) & : \drawvec{1                                            & 1 \\ 1 & 1} \rightarrow \drawvec{ 1 & 1\\ 0 & 0} \Rightarrow x_2 = t, x_1=t \\
+                             & \vec{x} = \drawvec{t                                        \\ t} \text{for some } t \ne 0
+\end{align*}
+
+We pick arbitrary t, want unit vector
+
+$$\vec{x} = \drawvec{1 \\ 1}$$
+
+$$\boxed{\vec{x_1} = \frac{1}{\sqrt{2}} \drawvec{1 \\ 1}}$$
+
+\begin{align*}
+    \lambda = 5 & : A-\lambda I = \drawvec{-1               & 1 \\ 1 & -1} \rightarrow \drawvec{-1 & 1 \\ 0 & 0} \Rightarrow x_2 = t, x_1 = -t \\
+                & \Rightarrow \vec{x} = \drawvec{-t             \\ t} \\
+                & \text{Normalize } \vec{x}                     \\
+                & \boxed{\vec{x_2} = \frac{1}{\sqrt{2}} \drawvec{1 \\ -1}}
+\end{align*}
+\end{example}
+
+\subsection{Summary}
+
+\begin{align*}
+    Summary &                                                                            \\
+            & \Rightarrow \lambda_1 = 3, \quad \vec{x_1} = \frac{1}{\sqrt{2}} \drawvec{1 \\ 1} \\
+            & \Rightarrow \lambda_2 = 5, \quad \vec{x_2} = \frac{1}{\sqrt2}\drawvec{1    \\ -1}
+\end{align*}
+
+\subsection{Steps}
+For an mxn matrix A
+\begin{enumerate}
+    \item Find eigenvalues
+          \begin{enumerate}
+              \item Find $\lambda$ such that $(A-\lambda I) = 0$
+              \item $(A-\lambda I) = 0$ returns a polynomial of degree n.
+              \item Find the roots of this polynomial
+          \end{enumerate}
+    \item Find eigenvectors
+          \begin{enumerate}
+              \item For each $\lambda$ solve $(A-\lambda I)\vec{x} = 0$ to find the associated eigenvectors $\vec{x_1}, \vec{x_2}, \cdot$
+              \item Ensure these vectors are normalized
+          \end{enumerate}
+    \item Note: $\lambda_1 * \lambda_2 = 3*5 = det(A) = 15$
+    \item and $\lambda_1 + \lambda_2 =$ Sum of diagonal entries of A. (called trace of A)
+\end{enumerate}
+
+\section{Eigen Stuffs}
+
+\begin{equation}
+    A^p \vec{x} = \lambda^p \vec{x}
+\end{equation}
+
+% \begin{align*}
+%     \text{Proof:} &\\
+%     & \text{If } A\vec{x} = \lambda \vec{x}, \text{ then }\\
+%     & A^2 \vec{x} = \lambda \vec{x} \text{ since} \\
+%     & A^2 \vec{x} = A(A\vec{x}) = A\lambda \vec{x} = \lambda A \vec{x} \\
+%     & = \lambda \lambda \vec{x} = \lambda^2 \vec{x}
+% \end{align*}
+
+\begin{equation}
+    A^{-1} \vec{x} = \lambda^{-1} \vec{x} \text{ if A is invertible}
+\end{equation}
+
+$A, A^p, A^{-1}$ have some eigenvector with associated eigenvalues $\lambda, \lambda^p, \lambda^{-1}$
+
+Let A be a tridiagonal matrix, then the eigenvalues of A are its diagonal entries
+
+Ex: $A = \begin{bmatrix}
+        4 & -1 & 2  \\
+        0 & -1 & 3  \\
+        0 & 0  & -1
+    \end{bmatrix}$
+
+$\Rightarrow$ eigenvalues are $\lambda_1 = 4, \lambda_2 = -1, \lambda_3 = -1$
+
+We also say that eigenvalue $\lambda_2=-1$ has a multiplicity of 2
+
+\subsection{Eigenvalues and Eigenvectors of A+B, A*B}
+
+If $\lambda$ is an eigenvalue of A, and $\mu$ is an eigenvalue of B, then it is generally not true that $\lambda + \mu$ is an eigenvalue of A+B, $\lambda * \mu$ is an eigenvalue of A*B.
+
+
+\end{document}

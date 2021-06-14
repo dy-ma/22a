@@ -1,0 +1,156 @@
+%========================%
+%        Preamble        %
+%========================%
+\documentclass[12pt]{amsart}
+
+%========================%
+%        Packages        %
+%========================%
+
+\usepackage[utf8]{inputenc}
+% \usepackage{amsmath}    % Included in amsart package
+% \usepackage{amsthm}     % 
+% \usepackage{amssymb}    % 
+\usepackage{mathtools}      % Paired Limiter Macros
+\usepackage{mdframed}       % boxes for theorem
+\usepackage[hidelinks]{hyperref}
+
+%========================% 
+%          Title         %
+%========================% 
+\title{Diagonalization of a Matrix}
+\author{Dylan Ang}
+\date{\today}
+
+%========================% 
+%        Theorems        %
+%========================% 
+\newmdtheoremenv{theorem}{Theorem}  % Boxed theorems
+\newtheorem{definition}{Definition} % Definitions
+\newtheorem*{proof*}{Proof}         % non-numbered
+\newtheorem*{remark}{Remark}        %
+\newtheorem*{example}{Example}      %
+\numberwithin{equation}{theorem}    % Local equation numbering
+
+%========================% 
+%        Macros          %
+%========================% 
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}  % Vertical bars
+\DeclarePairedDelimiter\norm{\lVert}{\rVert} % Double vertical bars
+\newcommand{\drawvec}[1]{                    % matrices on one line
+    \begin{bmatrix}
+        #1
+    \end{bmatrix}
+}
+
+%========================% 
+%         Document       %
+%========================% 
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\begin{example}
+    $A = \begin{bmatrix}
+            4 & -1 & 2  \\
+            0 & -1 & 3  \\
+            0 & 0  & -1
+        \end{bmatrix}$ has eigenvalues $\lambda_1 = 3, \lambda_2 = 5$ and eigenvectors $\vec{x_1}= \frac{1}{\sqrt{2}} \drawvec{-1 \\ 1}, \vec{x_2}= \frac{1}{\sqrt{2}}\drawvec{1 \\ 1}$
+\end{example}
+
+\begin{align} \label{Eigen 12}
+    A\vec{x_1} & = \lambda_1\vec{x_1} \\
+    A\vec{x_2} & = \lambda_2\vec{x_2}
+\end{align}
+
+Let $X=\drawvec{\vec{x_1} & \vec{x_2}}$, $\Lambda = \begin{bmatrix}
+        \lambda_1 & 0         \\
+        0         & \lambda_2
+    \end{bmatrix}$
+
+We can rewrite equations (\ref{Eigen 12}) as
+\begin{align*}
+    A\drawvec{\vec{x_1} & \vec{x_2}} & = \drawvec{\lambda_1 \vec{x_1} & \lambda_2 \vec{x_2}} = \underbrace{\drawvec{\vec{x_1} & \vec{x_2}} \drawvec{\lambda_1 & 0 \\ 0 & \lambda_2}}_{(\lambda_1\vec{x_1} = \vec{x_1} \lambda_1)}\\
+    AX                  & = X\Lambda
+\end{align*}
+
+Note that $\vec{x_1}$ and $\vec{x_1}$ are linearly independent, hence $X=\drawvec{\vec{x_1} & \vec{{x_2}}}$
+
+\begin{align*}
+    AX        & = X\Lambda         \\
+    X^{-1} AX & = X^{-1} X \Lambda \\
+    X^{-1}AX  & = \Lambda
+\end{align*}
+
+$\Rightarrow$ Transforms A into a diagonal matrix. A is diagonlized by its eigenvectors.
+
+\section{Eigendecomposition}
+
+\begin{align*}
+    AX       & = X\Lambda         \\
+    AXX^{-1} & = X\Lambda X^{-1}  \\
+    A        & = X \Lambda X^{-1}
+\end{align*}
+
+Matrix decomposition of A into eigenvector/values
+
+\emph{Eigendecomposition} of A
+
+\section{Conditions for validity}
+
+Both $A=X\Lambda X^{-1}, X^{-1}AX = \Lambda$ hold true for general nxn matrices under the following conditions.
+
+\begin{enumerate}
+    \item Eigenvector matrix X is invertible, which is true when the eigenvectors $\vec{x_1}, \vec{x_2}, \cdots , \vec{x_n}$ are linearly independent.
+\end{enumerate}
+
+\begin{theorem}
+    Eigenvectors $\vec{x_1}, \vec{x_2}, \cdots , \vec{x_j}$ that correspond to distinct eigenvalues (all different) are linearly independent. Moreover, an nxn matrix that has n different eigenvalues (no repeated numbers) must be diagonalizable.
+\end{theorem}
+
+\begin{proof}
+    Assume $c_1 \vec{x_1} + c_2 \vec{x_2} = \vec{0}$ (*)
+    Multiply equation (*) by A:
+    \begin{align*}
+        Ac_1 \vec{x_1} + Ac_2 \vec{x_2}                   & = \vec{0}       \\
+        c_1 A\vec{x_1} + c_2 A\vec{x_2}                   & = \vec{0}       \\
+        c_1 \lambda_1\vec{x_1} + c_2 \lambda_2\vec{x_2}   & = \vec{0} (**)  \\
+        \text{Multiply eq(*) by }\lambda_2                &                 \\
+        \lambda_2 c_1 \vec{x_1} + \lambda_1 c_2 \vec{x_2} & = \vec{0}       \\
+        c_1 \lambda_2\vec{x_1} + c_2 \lambda_1 \vec{x_2}  & = \vec{0} (***) \\
+        \text{Now subtract eq(***) from eq(**)}           &
+    \end{align*}
+    $$c_1 \lambda_1\vec{x_1} + c_2 \lambda_2\vec{x_2}  - (c_1 \lambda_2\vec{x_1} + c_2 \lambda_1 \vec{x_2}) = \vec{0}$$
+    $$c_1(\lambda_1 - \lambda_2) \vec{x_1} = \vec{0}$$
+
+    Since $\lambda_1 \neq \lambda_2$ (by assumption)
+
+    $\Rightarrow c_1 = 0$
+
+    Repeating steps with $\lambda_1$
+
+    $$\Rightarrow c_2(\lambda_1 - \lambda_2)\vec{x_2} = \vec{0}$$
+    $$\Rightarrow c_2 = 0$$
+
+    $\Longrightarrow \vec{x_1}$ and $\vec{x_2}$ are linearly independent.
+
+    When all $\vec{x_1}, \vec{x_2}, \cdots, \vec{x_j}, X=\drawvec{\vec{x_1} & \vec{x_2} & \cdots & \vec{x_j}}$ is invertible.
+\end{proof}
+
+\section{Powers of diagonalizable matrix}
+
+Let A be diagonalizable $A=X\Lambda X^{-1}$
+
+Then $A^2 = X\Lambda \underbrace{X^{-1} X}_{I}\Lambda X^{-1} =X\Lambda^2 X^{-1}$
+
+Generally $A^k =X\Lambda^k X^{-1}$
+
+If A is invertible, then $\Lambda, X$ are invertible and
+
+$A^{-1} = \underbrace{X\Lambda X^{-1}}_{A} = (X^{-1})^{-1} \Lambda^{-1} X^{-1} = X\Lambda^{-1}X^{-1}$
+
+$$A^{-1} = X\Lambda^{-1} X^{-1}$$
+
+\end{document}

@@ -1,0 +1,290 @@
+%========================%
+%        Preamble        %
+%========================%
+\documentclass[12pt]{amsart}
+
+%========================%
+%        Packages        %
+%========================%
+
+\usepackage[utf8]{inputenc}
+% \usepackage{amsmath}    % Included in amsart package
+% \usepackage{amsthm}     % 
+% \usepackage{amssymb}    % 
+\usepackage{mathtools}      % Paired Limiter Macros
+\usepackage{mdframed}       % boxes for theorem
+\usepackage[hidelinks]{hyperref}
+
+%========================% 
+%          Title         %
+%========================% 
+\title{Determinants}
+\author{Dylan Ang}
+\date{\today}
+
+%========================% 
+%        Theorems        %
+%========================% 
+\newmdtheoremenv{theorem}{Theorem}  % Boxed theorems
+\newtheorem{definition}{Definition} % Definitions
+\newtheorem*{proof*}{Proof}         % non-numbered
+\newtheorem*{remark}{Remark}        %
+\newtheorem{example}{Example}      %
+\numberwithin{equation}{theorem}    % Local equation numbering
+
+%========================% 
+%        Macros          %
+%========================% 
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}  % Vertical bars
+\DeclarePairedDelimiter\norm{\lVert}{\rVert} % Double vertical bars
+\newcommand{\drawvec}[1]{                    % matrices on one line
+    \begin{bmatrix}
+        #1
+    \end{bmatrix}
+}
+
+%========================% 
+%         Document       %
+%========================% 
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\begin{definition}
+    The determinant of a square matrix is a single number which carries important info about the matrix. We write det A.
+\end{definition}
+
+\begin{equation}
+    \text{Let } A =
+    \begin{bmatrix}
+        a & b \\
+        c & d
+    \end{bmatrix}
+    \text{ Then } det(A)=ad-bc
+\end{equation}
+
+$$\text{Recall that }A^{-1}=\frac{1}{ad-bc}
+    \begin{bmatrix}
+        a & b \\
+        c & d
+    \end{bmatrix}$$
+
+$$\Rightarrow A \text{ is invertible} \Leftrightarrow det(A) \neq 0$$
+
+$$\text{Can be written } det(A) =
+    \begin{vmatrix}
+        a & b \\
+        c & d
+    \end{vmatrix}$$
+
+We can define det(A) for any $n*n$ matrix recursively
+\begin{align} \label{formula:determinant}
+    \text{For 3 by 3 matrices}           \\
+    A      & = \begin{bmatrix}
+        a_{1 1} & a_{1 2} & a_{1 3} \\
+        a_{2 1} & a_{2 2} & a_{2 3} \\
+        a_{3 1} & a_{3 2} & a_{3 3}
+    \end{bmatrix} \\
+    det(A) & =
+    a_{1 1}
+    \begin{vmatrix}
+        a_{2 2} & a_{2 3} \\
+        a_{3 2} & a_{3 3}
+    \end{vmatrix}
+    - a_{1 2}
+    \begin{vmatrix}
+        a_{2 1} & a_{2 3} \\
+        a_{3 1} & a_{3 2}
+    \end{vmatrix}
+    + a_{1 3}
+    \begin{vmatrix}
+        a_{2 1} & a_{2 2} \\
+        a_{3 1} & a_{3 2}
+    \end{vmatrix}
+\end{align}
+
+\section{Rules for Determinant}
+
+\begin{enumerate}
+    \item $det(A)$ changes signs when we exchange two rows.
+    \item $det(A)$ is unchanged if a multiple of one row is subtracted from another row.
+          \begin{itemize}
+              \item $\Rightarrow A \text{ and } U \text{ have the same determinant}$.
+          \end{itemize}
+    \item For a triangular matrix, it's determinant is the product of the diagonal entries.
+    \item A matrix with a row of zeros has a $det(A)=0$.
+          \begin{itemize}
+              \item $\Rightarrow$ if $A$ has two identical rows $\Rightarrow det(A)=0$.
+          \end{itemize}
+    \item $det(A)=$ product of it's pivots.
+    \item $det(A)\neq 0$ if and only if $A$ is invertible.
+    \item $det(A) = det(A^{T})$.
+\end{enumerate}
+
+\begin{theorem}
+    $$det(AB) = det(A)*det(B)$$
+    $$A = \begin{bmatrix}
+            a & b \\
+            c & d
+        \end{bmatrix}, B=\begin{bmatrix}
+            p & q \\
+            r & s
+        \end{bmatrix}$$
+
+\end{theorem}
+
+\begin{proof}
+    \begin{align*}
+        det(A)*det(B) & = (ad-bc) * (ps-qr)                                     \\
+                      & = adps - bcps - adqr + bcqr                             \\
+                      & = (ad+br)(cq+ds) - (aq+bs)(cp+dr)                       \\
+        AB            & =  \begin{bmatrix}
+            a & b \\
+            c & d
+        \end{bmatrix}\begin{bmatrix}
+            p & q \\
+            r & s
+        \end{bmatrix}
+        = \begin{bmatrix}
+            ap+br & aq+bs \\
+            cp*dr & cq+ds
+        \end{bmatrix}                                            \\
+        det(AB)       & = (ap+br)(cq+ds)-(cp+dr)(aq+bs) \square
+    \end{align*}
+\end{proof}
+
+\section{Linearity of Determinant}
+
+\begin{equation*}
+    \begin{vmatrix}
+        xa+yA & xb+yB \\
+        c     & d
+    \end{vmatrix}
+    = x(ad-bc)+y(Ad-Bc) \\
+\end{equation*}
+$$\Rightarrow \text{det is linear in row 1}$$
+
+\begin{example}
+    \begin{equation*}
+        A = \begin{bmatrix}
+            1  & 2 & 3 \\
+            4  & 0 & 1 \\
+            -2 & 1 & 1
+        \end{bmatrix}
+    \end{equation*}
+    \begin{align*}
+        det(A) & = 1*0*1+4*1*3+(-2)*2*1     \\
+               & = (-2*0*3 - 1*1*1 - 4*2*1) \\
+               & = 0+12-4-(0-3-8)           \\
+               & = 8+11 = 19
+    \end{align*}
+\end{example}
+
+\begin{example}\textbf{Identity.}
+    \begin{equation*}
+        det \begin{bmatrix}
+            1 & 0 & 0 \\
+            0 & 1 & 0 \\
+            0 & 0 & 1
+        \end{bmatrix} = 1
+    \end{equation*}
+\end{example}
+
+\begin{example}\textbf{Row Exchanges.}
+    By Rule 1 for determinants, two row exchanges $\rightarrow$ determinant flips sign
+    \begin{align*}
+        det \begin{bmatrix}
+            0 & 0 & 1 \\
+            0 & 1 & 0 \\
+            1 & 0 & 0
+        \end{bmatrix} & = -1        \\
+        det \begin{bmatrix}
+            0 & 0 & 0 & 1 \\
+            0 & 0 & 1 & 0 \\
+            0 & 1 & 0 & 0 \\
+            1 & 0 & 0 & 0
+        \end{bmatrix} & = -(-1) = 1
+    \end{align*}
+    This happens because the $det(I^{4}) = 1$
+\end{example}
+
+\section{Example: Finding Determinant}
+
+\begin{example}\textbf{Finding Determinant.}
+    Compute \begin{align*}
+        det \begin{bmatrix}
+            1  & 0 & 0 & 0 \\
+            2  & 1 & 0 & 0 \\
+            -3 & 2 & 0 & 0 \\
+            4  & 4 & 1 & 1
+        \end{bmatrix} & = \Leftarrow \text{lower-triangular matrix} \\
+                                       & = 1*1*0*1 = 1
+    \end{align*}
+
+    \paragraph{Why?}
+    \begin{itemize}
+        \item Lower-triangular matrices are invertible if and only if diagonal entries are not 0.
+        \item Therefore, this matrix is not invertible.a
+        \item determinant of 0 means non-invertible.
+        \item Therefore the determinant is 0.
+    \end{itemize}
+\end{example}
+
+\begin{theorem}
+    If $Q$ is an orthogonal square matrix, then $det(Q)=\pm 1$
+    Prove with $Q^{T}Q=I$, $Q^{T}=Q^{-1}$, and $det(A)det(A^{-1}) = det(AA^{-1})$
+\end{theorem}
+
+\section{Parallelogram Theorem}
+
+\begin{theorem}
+    \textbf{Parallelogram}
+    Let P be the parallelogram spanned by the rows of $A$. Then
+    \begin{equation}
+        vol(P) = \lfloor det(A) \rfloor
+    \end{equation}
+\end{theorem}
+
+\begin{example}
+    \begin{align*}
+        A                            & = \begin{bmatrix}
+            4 & 1 \\
+            2 & 3
+        \end{bmatrix}  \\
+        \lfloor det(A) \rfloor       & = \lfloor 4(3) - 1(2) \rfloor \\
+        \text{area of parallelogram} & = 12 - 2 = 10
+    \end{align*}
+\end{example}
+
+\section{With LU Factorization}
+
+\begin{equation}
+    det(AA) = det(LU) = det(L)*det(U)
+\end{equation}
+
+\begin{example}
+    \begin{align*}
+        A      & = \begin{bmatrix}
+            4 & 2 & 0 \\
+            2 & 4 & 2 \\
+            0 & 2 & 4
+        \end{bmatrix}       \\
+        A      & = LU                               \\
+        L      & = \begin{bmatrix}
+            1           & 0           & 0 \\
+            \frac{1}{2} & 1           & 0 \\
+            0           & \frac{2}{3} & 1
+        \end{bmatrix}       \\
+        U      & = \begin{bmatrix}
+            4 & 2 & 0           \\
+            0 & 3 & 2           \\
+            0 & 0 & \frac{8}{3}
+        \end{bmatrix}       \\
+        det(A) & = det(L)det(U)                     \\
+               & = (1*1*1) * (4*3*\frac{8}{3}) = 32
+    \end{align*}
+\end{example}
+
+\end{document}

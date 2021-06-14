@@ -1,0 +1,491 @@
+%========================%
+%        Preamble        %
+%========================%
+\documentclass[12pt]{article}
+
+%========================%
+%        Packages        %
+%========================%
+
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}    % Included in amsart package
+\usepackage{amsthm}     % 
+\usepackage{amssymb}      % 
+\usepackage{mathtools}      % Paired Limiter Macros
+% \usepackage{mdframed}       % boxes for theorem
+\usepackage{enumitem}     % Continuous numbering of lists
+\usepackage[hidelinks]{hyperref}
+
+%========================% 
+%          Title         %
+%========================% 
+\title{Linear Algebra Properties}
+\author{Dylan Ang}
+\date{\today}
+
+%========================% 
+%        Theorems        %
+%========================% 
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}  % Boxed theorems
+\newtheorem{definition}{Definition} % Definitions
+\newtheorem{example}{Example}       %
+\newtheorem{algorithm}{Algorithm}
+\newtheorem*{proof*}{Proof}         % non-numbered
+\newtheorem*{remark}{Remark}        %
+\numberwithin{equation}{theorem}    % Local equation numbering
+
+\setcounter{tocdepth}{3}      % Show subsubsections in contents
+
+%========================% 
+%        Macros          %
+%========================% 
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}  % Vertical bars
+\DeclarePairedDelimiter\norm{\lVert}{\rVert} % Double vertical bars
+\newcommand{\drawvec}[1]{                    % matrices on one line
+    \begin{bmatrix}
+        #1
+    \end{bmatrix}
+}
+
+%========================% 
+%         Document       %
+%========================% 
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\section{Linear Equations}
+
+\subsection{Systems of Linear Equations}
+
+\begin{definition}
+    A system of linear equations has
+    \begin{enumerate}
+        \item no solution, or
+        \item exactly one solution, or
+        \item infinitely many solutions.
+    \end{enumerate}
+    A system of linear equations is said to be \textbf{consistent} if it has either one solution of infinitely many solutions; a system is \textbf{inconsistent} if it has no solution.
+    \begin{remark}
+        There are two fundamental questions about any linear system.
+        \begin{enumerate}
+            \item Is the system consistent; that is, does at least one solution \emph{exist?}
+            \item If a solution exists, is it the \emph{only} one; that is, is the solution \emph{unique?}
+        \end{enumerate}
+    \end{remark}
+\end{definition}
+
+\begin{definition}
+    There are 3 elementary row operations.
+    \begin{enumerate}
+        \item (Replacement) Replace one row by the sum of itself and a multiple of another row.
+        \item (Interchange) Interchange two rows.
+        \item (Scaling) Multiply all entries in a row by a nonzero constant.
+    \end{enumerate}
+    Two matrices are called \textbf{row equivalent} if there is a sequence of elementary row operations that transforms one matrix into the other.
+    \begin{remark}
+        Row operations are \textbf{reversible}.
+    \end{remark}
+\end{definition}
+
+\begin{theorem}(Lay 7)
+    If the augmented matrices of two linear systems are row equivalent, then the two systems have the same solution set.
+\end{theorem}
+
+\subsection{Row Reduction and Echelon Forms}
+
+\begin{definition}
+    A rectangular matrix is in \textbf{echelon form} (or \textbf{row echelon form}) if it has the following three properties:
+    \begin{enumerate}
+        \item All nonzero rows are above any rows of all zeros.
+        \item Each leading entry of a row is in a column to the right of the leading entry of the row above it.
+        \item All entries in a column below a leading entry are zeros.
+    \end{enumerate}
+    If a matrix in echelon form satisfies the following additional conditions, then it is in \textbf{reduced echelon form} (or \textbf{reduced row echelon form}):
+    \begin{enumerate}[resume]
+        \item The leading entry in each nonzero row is 1.
+        \item Each leading 1 is the only nonzero entry in its column.
+    \end{enumerate}
+\end{definition}
+
+\begin{theorem}
+    Uniqueness of the Reduced Row Echelon Form.
+    Each matrix is row equivalent to one and only one reduced echelon matrix.
+\end{theorem}
+
+\begin{definition}
+    A \textbf{pivot position} in a matrix A is a location in A that corresponds to a leading 1 in the reduced echelon form of A. A \textbf{pivot column} is a column of A that contains a pivot position.
+\end{definition}
+
+\begin{algorithm} Row Reduction.
+    The algorithm that follows consists of four steps, and it produces a matrix in echelon form. A fifth step produces a matrix in reduced echelon form. We illustrate the algorithm by an example.
+    \begin{enumerate}
+        \item Begin with the leftmost nonzero column. This is a pivot column. The pivot position is at the top.
+        \item Select a nonzero entry in the pivot column as a pivot. If necessary, interchange rows to move this entry into the pivot position.
+        \item Use row replacement operations to create zeros in all positions below the pivot.
+        \item Cover (or ignore) the row containing the pivot position and cover all rows, if any, above it. Apple steps 1-3 to the submatrix that remains. Repeat the process until there are no more nonzero rows to modify.
+        \item Beginning with the rightmost pivot and working upward and to the left, create zeros above each pivot. If a pivot is not 1, make it 1 by a scaling operation.
+    \end{enumerate}
+    \begin{remark}
+        The combination of steps 1-4 is called the \textbf{forward phase} of the row reduction algorithm. Step 5, which produces the unique reduced echelon form, is called the \textbf{backward phase}.
+    \end{remark}
+\end{algorithm}
+
+\subsection{Solutions of Linear Systems}
+
+Suppose, for example, that the augmented matrix of a linear system has been changed into the equivalent reduced echelon form $$\begin{bmatrix}
+        1 & 0 & -5 & 1 \\
+        0 & 1 & 1  & 4 \\
+        0 & 0 & 0  & 0
+    \end{bmatrix}$$
+
+The associated system of equations is
+\begin{align} \label{ex:solution-system}
+    x_1 \quad -5x_3 & = 1 \\
+    x_2 + x_3       & = 4 \\
+    0               & = 0
+\end{align}
+
+The variables $x_1$ and $x_2$ corresponding to pivot columns in the matrix are called \textbf{leading/basic variables.} The other variable, $x_3$, is called a \textbf{free variable}.
+
+To solve \ref{ex:solution-system}, solve the system for the leading variables. Ignore the third equation; it offers no restriction on the variables.
+
+\begin{align} \label{ex:solution-simp}
+    x_1 & = 1+5x_3 \\
+    x_2 & = 4-x_3  \\
+    x_3 & is free
+\end{align}
+
+The statement ``$x_3$ is free'' means that you are free to choose any value for $x_3$. Once that is done, the formulas in \ref{ex:solution-simp} determine the values of $x_1$ and $x_2$. For instance, when $x_3=$, the solution is (1,4,0).
+
+\subsection{Parametric Descriptions of Solution Sets}
+
+Parametric solution sets use free variables as parameters. Solving a system amounts to finding a parametric description of the solution set or determining that the solution set is empty.
+
+Whenever a system is consistent and has free variables, the solution set has many parametric descriptions.
+
+\begin{theorem}(Lay 21) Existence and Uniqueness Theorem.
+    A linear system is consistent if and only if the rightmost column of the augmented matrix is not a pivot column -- that is, if and only if an echelon form of the augmented matrix has no row of the form $$\drawvec{0 & \cdots & 0 & b} \text{ with b nonzero}$$ If a linear system is consistent, then the solution set contains either (i) a unique solution, when there are no free variables, or (ii) infinitely many solutions, when there is at least one free variable.
+\end{theorem}
+
+\begin{algorithm}(Lay 21) Row Reduction to Solve Linear System.
+    \begin{enumerate}
+        \item Write the augmented matrix of the system.
+        \item Use the row reduction algorithm to obtain the equivalent augmented matrix in echelon form. Decide whether the system is consistent. If there is no solution, stop; otherwise, go to the next step.
+        \item Continue row reduction to obtain the reduced echelon form.
+        \item Write the system of equations corresponding to the matrix obtained in step 3.
+        \item Rewrite each nonzero equation from step 4 so that its one basic variable is expressed in terms of any free variables appearing in the equation.
+    \end{enumerate}
+\end{algorithm}
+
+\section{Matrix Algebra}
+
+\subsection{Sums and Scalar Multiples}
+
+\begin{theorem}(Lay 93)
+    Let A,B, and C be matrices of the same size, and let r and s be scalars.
+
+    \begin{enumerate}
+        \item $A+B=B+A$
+        \item $(A+B)+C = A+(B+C)$
+        \item $A+0=A$
+        \item $r(A+B)=rA+rB$
+        \item $(r+s)A=rA+sA$
+        \item $r(sA)=(rs)A$
+    \end{enumerate}
+\end{theorem}
+
+\subsection{Properties of Matrix Multiplication}
+
+\begin{theorem}(Lay 97)
+    Let A be an m x n matrix, and let B and C have sizes for which the indicated sums and products are defined.
+
+    \begin{enumerate}
+        \item $A(BC)=(AB)C$ (associative law of multiplication)
+        \item $A(B+C)=AB+AC$ (left distributive law)
+        \item $(B+C)A = BA+CA$ (right distributive law)
+        \item $r(AB) = (rA)B =A(rB)$ for any scalar r.
+        \item $I_m A=A=AI_n$
+        \item $A^0=I$
+    \end{enumerate}
+\end{theorem}
+
+\begin{remark}(Lay 98)
+    WARNING
+    \begin{enumerate}
+        \item In general, $AB \neq BA$.
+        \item The cancellation laws do \emph{not} hold for matrix multiplication. That is, if $AB=AC$, then it is \emph{not} true in general that $B=C$.
+        \item If a product $AB$ is the zero matrix, you \emph{cannot} conclude in general that either $A=0$ or $B=0$.
+    \end{enumerate}
+\end{remark}
+
+\subsection{Transpose}
+
+\begin{theorem}(Lay 99)
+    Let A and B denote matrices whose sizes are appropriate for the following sums and products.
+    \begin{enumerate}
+        \item $(A^T)^T=A$
+        \item $(A+B)^T=A^T+B^T$
+        \item For any scalar r, $(rA)^T=rA^T$
+        \item $(AB)^T=B^TA^T$
+    \end{enumerate}
+    \begin{remark}
+        The transpose of a product of matrices equals the product of their transposes in the reverse order.
+    \end{remark}
+\end{theorem}
+
+\subsection{Inverse of a Matrix}
+
+\begin{definition}
+    $A^{-1}A=I$ and $AA^{-1}=I$. A matrix that is \emph{not} invertible is sometimes called a \textbf{singular matrix}, and an invertible matrix is called a \textbf{nonsingular matrix.}
+\end{definition}
+
+\begin{theorem}(Lay 103)
+    Let $A=\drawvec{a & b \\ c & d}$. If $ad-bc \neq 0$, then A is invertible and $$A^{-1}=\frac{1}{ad-bc} \drawvec{d & -b \\ -c & a}$$ If $ad-bc=0$, then A is not invertible.
+\end{theorem}
+
+\begin{theorem}(Lay 104)
+    If A is an invertible n x n matrix, then for each b in $\mathbb{R}^n$, the equation $Ax=b$ has the unique solution $x=A^{-1}b$.
+\end{theorem}
+
+\begin{theorem}(Lay 105)
+    \begin{enumerate}
+        \item If A is an invertible matrix, then $A^{-1}$ is invertible and $$(A^{-1})^{-1}=A$$
+        \item If A and B are n x n matrices, then so is AB, and the inverse of AB is the product of the inverses of A and B in the reverse order. That is, $$(AB)^{-1}=B^{-1}A^{-1}$$
+        \item If A is an invertible matrix, then so is $A^T$, and the inverse of $A^T$ is the transpose of $A^{-1}$. That is, $$(A^T)^{-1}=(A^{-1})^T$$
+    \end{enumerate}
+    \begin{remark}
+        The product of n x n invertible matrices is invertible, and the inverse is the product of their inverses in the reverse order.
+    \end{remark}
+\end{theorem}
+
+\subsubsection{Elementary Matrices}
+
+\begin{definition}
+    An elementary matrix is one that is obtained by performing a single elementary row operation on an identity matrix. The next example illustrates the three kinds of elementary matrices.
+\end{definition}
+
+\begin{example}
+    let $$E_1=\begin{bmatrix}
+            1  & 0 & 0 \\
+            0  & 1 & 0 \\
+            -4 & 0 & 1
+        \end{bmatrix},
+        E_2=\begin{bmatrix}
+            0 & 1 & 0 \\
+            1 & 0 & 0 \\
+            0 & 0 & 1
+        \end{bmatrix},
+        E_3=\begin{bmatrix}
+            1 & 0 & 0 \\
+            0 & 1 & 0 \\
+            0 & 0 & 5
+        \end{bmatrix},
+        A=\begin{bmatrix}
+            a & b & c \\
+            d & e & f \\
+            g & h & i
+        \end{bmatrix}$$
+
+    Verify that $E_1A=\begin{bmatrix}
+            a    & b    & c    \\
+            d    & e    & f    \\
+            g-4a & h-4b & i-4c
+        \end{bmatrix},
+        E_2A=\begin{bmatrix}
+            d & e & f \\
+            a & b & c \\
+            g & h & i
+        \end{bmatrix},\\
+        E_3A=\begin{bmatrix}
+            a  & b  & c  \\
+            d  & e  & f  \\
+            5g & 5h & 5i
+        \end{bmatrix}$
+\end{example}
+
+\begin{remark}
+    If an elementary row operation is performed on an m x n matrix A, the resulting matrix can be written as EA, where the m x m matrix E is created by performing the same row operation of $I_m$.
+\end{remark}
+
+\begin{remark}
+    Each elementary matrix E is invertible. The inverse of E is the elementary matrix of the same type that transforms E back into I.
+\end{remark}
+
+\begin{theorem}(Lay 107)
+    An n x n matrix A is invertible if and only if A is row equivalent to $I_n$, and in this case, any sequence of elementary row operations that reduces A to $I_n$ also transforms $I_n$ into $A^{-1}$.
+\end{theorem}
+
+\subsubsection{Algorithm for Finding the Inverse of a Matrix}
+
+Row reduce the augmented matrix $\drawvec{A & I}$.  If A is row equivalent to I, then $\drawvec{A & I}$ is row equivalent to $\drawvec{I & A^{-1}}$. Otherwise, A does not have an inverse. (Lay 108)
+
+\subsection{Characterizations of Invertible Matrices}
+
+\begin{theorem}(Lay 112)
+    The Invertible Matrix Theorem
+
+    Let A be a square n x n matrix. Then the following statements are equivalent. That is, for a given A, the statements are either all true or all false.
+    \begin{enumerate}
+        \item A is an invertible matrix.
+        \item A is row equivalent to the n x n identity matrix.
+        \item A has n pivot positions.
+        \item The equation $Ax=0$ has only the trivial solution.
+        \item The columns of A form a linearly independent set.
+        \item The linear transformations $x \mapsto Ax$ is one-to-one.
+        \item The equation $Ax=b$ has at least one solution for each b in $\mathbb{R}^n$.
+        \item The columns of A span $\mathbb{R}^n$.
+        \item The linear transformation $x \mapsto Ax$ maps $\mathbb{R}^n$ onto $\mathbb{R}^n$.
+        \item There is an n x n matrix C such that $CA=I$.
+        \item There is an n x n matrix D such that $AD=I$.
+        \item $A^T$ is an invertible matrix.
+    \end{enumerate}
+\end{theorem}
+
+\begin{theorem}
+    A linear transformation $T:\mathbb{R}^n \to \mathbb{R}^n$ is said to be invertible if there exists a function $S:\mathbb{R}^n \to \mathbb{R}^n$ such that
+    \begin{equation} \label{st invertible}
+        S(T(x))= x \text{ for all x in } \mathbb{R}^n
+    \end{equation}
+    \begin{equation} \label{ts invertible}
+        T(S(x))= x \text{ for all x in } \mathbb{R}^n
+    \end{equation}
+\end{theorem}
+
+\begin{theorem}(Lay 114)
+    Let $T:\mathbb{R}^n \to \mathbb{R}^n$ be a linear transformation and let A be the standard matrix for T. Then T is invertible if and only if A is an invertible matrix. In that case, the linear transformation S given by $S(x)=A^{-1}x$ is the unique function satisfying equations \ref{st invertible} and \ref{ts invertible}.
+\end{theorem}
+
+\subsection{Matrix Factorizations}
+
+\begin{definition}(Lay 124) The LU Factorization.
+    \begin{equation*}
+        A=
+        \underbrace{
+            \begin{bmatrix}
+                1 & 0 & 0 & 0 \\
+                * & 1 & 0 & 0 \\
+                * & * & 1 & 0 \\
+                * & * & * & 1 \\
+            \end{bmatrix}}_{L}
+        \underbrace{
+            \begin{bmatrix}
+                \blacksquare & *            & * & *            & * \\
+                0            & \blacksquare & * & *            & * \\
+                0            & 0            & 0 & \blacksquare & * \\
+                0            & 0            & 0 & 0            & 0
+            \end{bmatrix}}_{U}
+    \end{equation*}
+    At first, assume that A is an m x n matrix that can be row reduced to echelon form, without row interchanges. (Later, we will treat the general case.) Then A can be written in the form A D LU , where L is an m x m lower triangular matrix with 1’s on the diagonal and U is an m x n echelon form of A. For instance, see the matrix A. Such a factorization is called an LU factorization of A. The matrix L is invertible and is called a unit lower triangular matrix.
+    When $A=LU$, the equation $Ax=b$ can be written as $L(Ux)=b$. Writing $y$ for $Ux$, we can find $x$ by solving the pair of equations.
+    \begin{align*}
+        Ly & =b \\
+        Ux & =y
+    \end{align*}
+\end{definition}
+
+\begin{algorithm} (Lay 126) Algorithm for an LU Factorization
+    \begin{enumerate}
+        \item Reduce A to an echelon form U by a sequence of row replacement operations, if possible.
+        \item Place entries in L such that the same sequence of row operations reduced L to I.
+    \end{enumerate}
+\end{algorithm}
+
+\section{Vector Spaces}
+
+\begin{definition}
+    A \textbf{vector space} is a nonempty set V of objects, called vectors, on which are defined two operations, called \emph{addition} and \emph{multiplication by scalars} (real numbers), subject to the ten axioms (or rules) listed below. The axioms must hold for all vectors u, v, and w in V and for all scalars c and d.
+    \begin{enumerate}
+        \item The sum of u and v, denoted by $u+v$, is in V.
+        \item $u+v=v+u$.
+        \item $(u+v)+w=u+(v+w)$.
+        \item There is a zero vector 0 in V such that $u+0=u$.
+        \item For each u in V, there is a vector $-u$ in V such that $u+(-u)=0$.
+        \item The scalar multiple of u by c, denoted by cu, is in V.
+        \item $c(u+v)=cu+cv$.
+        \item $(c+d)u=cu+du$.
+        \item $c(du)=(cd)u$.
+        \item $Iu=u$.
+    \end{enumerate}
+    Using only these axioms, one can show that the zero vector in Axiom 4 is unique, and the vector $-u$, called the negative of u, in Axiom 5 is unique is unique for each u in V.
+    \begin{remark}
+        For each u in V and scalar c,
+        \begin{align}
+            0u & = 0     \\
+            c0 & = 0     \\
+            -u & = (-1)u
+        \end{align}
+    \end{remark}
+\end{definition}
+
+\begin{definition}
+    A \textbf{subspace} of a vector space V is a subset H of V that has three properties:
+    \begin{enumerate}
+        \item The zero vector of V is in H.
+        \item H is closed under vector addition. That is, for each u and v in H, the sum $u+v$ is in H.
+        \item H is closed under multiplication by scalars. That is, for each u in H and each scalar c, the vector $cu$ is in H.
+    \end{enumerate}
+\end{definition}
+
+\begin{theorem}
+    If $v_1 \cdots v_p$ are in a vector space V, then $Span\{v_1, \cdots, v_p\}$ is subspace of V.
+\end{theorem}
+
+\subsection{Null Space}
+
+\begin{theorem}
+    The null space of an m x n matrix A is a subspace of $\mathbb{R}^n$. Equivalently, the set of all solutions to a system $Ax=0$ of m homogenous linear equations in n unknowns is a subspace of $\mathbb{R}^n$.
+\end{theorem}
+
+\subsubsection{The Column Space of a Matrix}
+
+\begin{definition}
+    The \textbf{column space} of a m x n matrix A, written as $Col A$, is the set of all linear combinations of the columns of A. If $A=\{a_1, \cdots, a_n\}$, then $$Col A=Span\{a_1, \cdots, a_n\}$$
+\end{definition}
+
+\begin{theorem}
+    The column space of an m x n matrix A is a subspace of $\mathbb{R}^m$
+\end{theorem}
+
+\begin{remark}
+    The column space of an m x n matrix A is all of $\mathbb{R}^m$ if and only if the equation $Ax=b$ has a solution for each b in $\mathbb{R}^m$
+\end{remark}
+
+\subsubsection{Contrast between Nul A and Col A}
+
+\begin{enumerate}
+    \item [\textbf{Nul A}]
+    \item Nul A is a subspace of $\mathbb{R}^n$
+    \item Nul A is implicitly defined; that is, you are given only a condition $(Ax=0)$ that vectors in Nul A must satisfy.
+    \item It takes time to find vectors in Nul A. Row operations on $\drawvec{A & 0}$ are required.
+    \item There is no obvious relation between Nul A and the entries in A.
+    \item A typical vector v in Nul A has the property that $Av=0$.
+    \item Given a specific vector v, it is easy to tell if v is in Nul A. Just compute Av.
+    \item $Nul A=\{0\}$ if and only if the equation $Ax=0$ has only the trivial solution.
+    \item $Nul A=\{0\}$ if and only if the linear transformation $x\mapsto Ax$ is one-to-one.
+\end{enumerate}
+
+\begin{enumerate}
+    \item [\textbf{Col A}]
+    \item Col A is a subspace of $\mathbb{R}^m$.
+    \item Col A is explicitly defined; that is, you are told how to build vectors in Col A.
+    \item It is easy to find vectors in Col A. The columns of A are displayed; others are formed from them.
+    \item There is an obvious relation between Col A and the entries in A, since each column of A is in Col A. 
+    \item A typical vector v in Col A has the property that the equation $Ax=v$ is consistent.
+    \item Given a specific vector v, it may take time to tell if v is in Col A. Row operations on $\drawvec{A & v}$ are required.
+    \item $Col A=\mathbb{R}^m$ if and only if the equation $Ax=b$ has a solution for every b in $\mathbb{R}^m$.
+    \item $Col A=\mathbb{R}^m$ if and only if the linear transformation $x \mapsto Ax$ maps $\mathbb{R}^n$ onto $\mathbb{R}^m$.
+\end{enumerate}
+
+\begin{definition}
+    A \textbf{linear transformation} T from a vector space V into a vector space W is a rule that assigns to each vector x in V is a unique vector $T(x)$ in W, such that
+    \begin{align}
+        T(u+v) = T(u) + T(v) &\quad \text{for all u, v in V, and} \\
+        T(cu) = cT(u) &\quad \text{for all u in V and all scalars c.}
+    \end{align}
+\end{definition}
+
+\end{document}
